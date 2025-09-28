@@ -30,9 +30,5 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid.Background>
-            <ImageBrush ImageSource="" Stretch=""/>
-        </Grid.Background>
-
     </Grid>
 </Page>
