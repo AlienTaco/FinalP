@@ -122,7 +122,10 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MenuPage.xaml.cs">
+    <Compile Include="Pages\GamePage.xaml.cs">
+      <DependentUpon>GamePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MenuPage.xaml.cs">
       <DependentUpon>MenuPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -133,9 +136,12 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Backgrounds\BackgroundGame.png" />
     <Content Include="Assets\Backgrounds\ship%281%29.png" />
     <Content Include="Assets\Icons\Battledeck.png" />
+    <Content Include="Assets\Icons\Help.png" />
     <Content Include="Assets\Icons\Options.png" />
+    <Content Include="Assets\Icons\Return.png" />
     <Content Include="Assets\Icons\Start.png" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
@@ -148,7 +154,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MenuPage.xaml">
+    <Page Include="Pages\GamePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MenuPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
