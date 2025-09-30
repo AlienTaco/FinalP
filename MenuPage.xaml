@@ -10,25 +10,40 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/Backgrounds/ship(1).png" Stretch="Uniform"/>
+        </Grid.Background>
+        <Viewbox Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="2">
+            <Image Source="/Assets/Icons/Battledeck.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="60"/>
+        </Viewbox>
+        <Viewbox Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="3" Grid.RowSpan="2">
+            <Button x:Name="START" Background="Transparent">
+                <Image Source="/Assets/Icons/Start.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="60"/>
+            </Button>
+        </Viewbox>
+        <Viewbox Grid.Column="3" Grid.Row="5" Grid.ColumnSpan="3" Grid.RowSpan="2">
+        <Button x:Name="OPTIONS" Background="Transparent">
+            <Image Source="/Assets/Icons/Options.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="60"/>
+        </Button>
+        </Viewbox>
     </Grid>
 </Page>
