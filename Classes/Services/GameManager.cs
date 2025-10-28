@@ -13,8 +13,8 @@ namespace FinalP.Classes.Services
 {
     public class GameManager
     {
-        private readonly Canvas gameCanvas;
-        private readonly List<GameObject> objects = new();
+        private readonly Canvas Warboard;
+        private readonly List<GameObject> objects =new List <GameObject>();
 
         public int Rows { get; } = 5;
         public int Columns { get; } = 7;
@@ -22,31 +22,36 @@ namespace FinalP.Classes.Services
 
         public GameManager(Canvas canvas)
         {
-            gameCanvas = canvas;
+            Warboard = canvas;
         }
 
-        public void AddObject(GameObject obj)
+        public void InitializeBoard()
         {
-            objects.Add(obj);
-            obj.CreateVisual(gameCanvas, Colors.Gray);
-        }
-
-        public void RemoveObject(GameObject obj)
-        {
-            obj.Destroy(gameCanvas);
-            objects.Remove(obj);
-        }
-
-        public void ClearAll()
-        {
-            foreach (var obj in objects)
-                obj.Destroy(gameCanvas);
+            Warboard.Children.Clear();
             objects.Clear();
+
+            for (int row = 0; row < Rows; row++)
+            {
+                for (int col = 0; col < Columns; col++)
+                {
+                    double x = col * CellSize;
+                    double y = row * CellSize;
+
+                    var cell = new GameObject(x, y)
+                    {
+                        Size = CellSize
+                    };
+
+                    objects.Add(cell);
+                    cell.CreateVisual(Warboard);
+                }
+            }
         }
 
-        public (double x, double y) GetCellPosition(int row, int col)
+        public void ClearBoard()
         {
-            return (col * CellSize, row * CellSize);
+            Warboard.Children.Clear();
+            objects.Clear();
         }
     }
 }

@@ -11,43 +11,35 @@ using Windows.UI.Xaml.Shapes;
 namespace FinalP.Classes.Templates
 {
     public abstract class GameObject
-    {
+    { 
         public double X { get; set; }
         public double Y { get; set; }
-        public double Width { get; set; } = 50;
-        public double Height { get; set; } = 50;
-        public bool IsActive { get; set; } = true;
+        public double Size { get; set; } = 50;
+        public Color Color { get; set; } = Colors.LightBlue;
 
-        protected Rectangle Visual;
+        private Rectangle visual;
 
-        public virtual void CreateVisual(Canvas canvas, Color color)
+        public GameObject(double x, double y)
         {
-            Visual = new Rectangle
+            X = x;
+            Y = y;
+        }
+
+        // Creates and draws the rectangle on the Canvas
+        public virtual void CreateVisual(Canvas canvas)
+        {
+            visual = new Rectangle
             {
-                Width = Width,
-                Height = Height,
-                Fill = new SolidColorBrush(color)
+                Width = Size,
+                Height = Size,
+                Stroke = new SolidColorBrush(Colors.Black),
+                Fill = new SolidColorBrush(Color)
             };
 
-            Canvas.SetLeft(Visual, X);
-            Canvas.SetTop(Visual, Y);
-            canvas.Children.Add(Visual);
-        }
+            Canvas.SetLeft(visual, X);
+            Canvas.SetTop(visual, Y);
 
-        public virtual void UpdatePosition()
-        {
-            if (Visual == null) return;
-            Canvas.SetLeft(Visual, X);
-            Canvas.SetTop(Visual, Y);
-        }
-
-        public virtual void Destroy(Canvas canvas)
-        {
-            if (Visual != null)
-            {
-                canvas.Children.Remove(Visual);
-                Visual = null;
-            }
+            canvas.Children.Add(visual);
         }
     }
 }

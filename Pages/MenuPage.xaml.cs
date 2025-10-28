@@ -52,5 +52,6 @@ namespace FinalP
         {
             Grid1.Visibility = Visibility.Visible;
         }
+
     }
 }
