@@ -119,8 +119,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\GameManager.cs" />
-    <Compile Include="Classes\GameObjects.cs" />
+    <Compile Include="Classes\Services\GameManager.cs" />
+    <Compile Include="Classes\Templates\GameObject.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -145,6 +145,56 @@
     <Content Include="Assets\Icons\Options.png" />
     <Content Include="Assets\Icons\Return.png" />
     <Content Include="Assets\Icons\Start.png" />
+    <Content Include="Assets\Splash Screen\LargeTile.scale-100.png" />
+    <Content Include="Assets\Splash Screen\LargeTile.scale-125.png" />
+    <Content Include="Assets\Splash Screen\LargeTile.scale-150.png" />
+    <Content Include="Assets\Splash Screen\LargeTile.scale-200.png" />
+    <Content Include="Assets\Splash Screen\LargeTile.scale-400.png" />
+    <Content Include="Assets\Splash Screen\SmallTile.scale-100.png" />
+    <Content Include="Assets\Splash Screen\SmallTile.scale-125.png" />
+    <Content Include="Assets\Splash Screen\SmallTile.scale-150.png" />
+    <Content Include="Assets\Splash Screen\SmallTile.scale-200.png" />
+    <Content Include="Assets\Splash Screen\SmallTile.scale-400.png" />
+    <Content Include="Assets\Splash Screen\SplashScreen.scale-100.png" />
+    <Content Include="Assets\Splash Screen\SplashScreen.scale-125.png" />
+    <Content Include="Assets\Splash Screen\SplashScreen.scale-150.png" />
+    <Content Include="Assets\Splash Screen\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Splash Screen\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Splash Screen\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Splash Screen\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Splash Screen\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Splash Screen\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Splash Screen\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-unplated_targetsize-24.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.targetsize-32.png" />
+    <Content Include="Assets\Splash Screen\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\Splash Screen\StoreLogo.scale-100.png" />
+    <Content Include="Assets\Splash Screen\StoreLogo.scale-125.png" />
+    <Content Include="Assets\Splash Screen\StoreLogo.scale-150.png" />
+    <Content Include="Assets\Splash Screen\StoreLogo.scale-200.png" />
+    <Content Include="Assets\Splash Screen\StoreLogo.scale-400.png" />
+    <Content Include="Assets\Splash Screen\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Splash Screen\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Splash Screen\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Splash Screen\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\Splash Screen\Wide310x150Logo.scale-400.png" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
   <ItemGroup>

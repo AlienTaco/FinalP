@@ -16,7 +16,7 @@
   <Properties>
     <DisplayName>FinalP</DisplayName>
     <PublisherDisplayName>cs2021</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets\Splash Screen\StoreLogo.png</Logo>
   </Properties>
 
   <Dependencies>
@@ -33,12 +33,12 @@
       EntryPoint="FinalP.App">
       <uap:VisualElements
         DisplayName="FinalP"
-        Square150x150Logo="Assets\Square150x150Logo.png"
-        Square44x44Logo="Assets\Square44x44Logo.png"
+        Square150x150Logo="Assets\Splash Screen\Square150x150Logo.png"
+        Square44x44Logo="Assets\Splash Screen\Square44x44Logo.png"
         Description="FinalP"
         BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:DefaultTile Wide310x150Logo="Assets\Splash Screen\Wide310x150Logo.png" Square71x71Logo="Assets\Splash Screen\SmallTile.png" Square310x310Logo="Assets\Splash Screen\LargeTile.png"/>
+        <uap:SplashScreen Image="Assets\Splash Screen\SplashScreen.png" />
       </uap:VisualElements>
     </Application>
   </Applications>
