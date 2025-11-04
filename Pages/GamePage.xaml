@@ -32,7 +32,7 @@
         
         <Viewbox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="1">
     <Button x:Name="RETURN" Background="Transparent" Click="RETURN_Click">
-        <Image Source="/Assets/Icons/Return.png" Stretch="UniformToFill" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="60"/>
+        <Image Source="/Assets/Icons/Return.png" Stretch="UniformToFill"/>
     </Button>
 </Viewbox>
  

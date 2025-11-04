@@ -4,42 +4,76 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 
 namespace FinalP.Classes.Templates
 {
-    public abstract class GameObject
-    { 
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Size { get; set; } = 50;
-        public Color Color { get; set; } = Colors.LightBlue;
+    public enum Orientation
+    {
+        Horizontal,
+        Vertical
+    }
 
-        private Rectangle visual;
+    public class GameObject
+    {
+        public int Row { get; private set; }
+        public int Column { get; private set; }
+        public int Length { get; private set; } // Ship size from 2 to 4
+        public Orientation Rotation { get; private set; }
 
-        public GameObject(double x, double y)
+        public double CellSize { get; set; } = 50;
+        public Rectangle VisualElement { get; private set; }
+        private Canvas parentCanvas;
+
+        public GameObject(int row, int column, int length, Orientation rotation, Canvas canvas)
         {
-            X = x;
-            Y = y;
+            Row = row;
+            Column = column;
+            Length = length;
+            Rotation = rotation;
+            parentCanvas = canvas;
+            CreateVisual();
         }
 
-        // Creates and draws the rectangle on the Canvas
-        public virtual void CreateVisual(Canvas canvas)
+        private void CreateVisual()
         {
-            visual = new Rectangle
+            // Rectangle width depends on orientation and length
+            double width = Rotation == Orientation.Horizontal ? Length * CellSize : CellSize;
+            double height = Rotation == Orientation.Vertical ? Length * CellSize : CellSize;
+
+            VisualElement = new Rectangle
             {
-                Width = Size,
-                Height = Size,
+                Width = width,
+                Height = height,
+                Fill = new SolidColorBrush(Colors.Yellow),
                 Stroke = new SolidColorBrush(Colors.Black),
-                Fill = new SolidColorBrush(Color)
+                StrokeThickness = 2,
+                RadiusX = 5,
+                RadiusY = 5
             };
 
-            Canvas.SetLeft(visual, X);
-            Canvas.SetTop(visual, Y);
+            PlaceOnCanvas();
+            parentCanvas.Children.Add(VisualElement);
+        }
 
-            canvas.Children.Add(visual);
+        private void PlaceOnCanvas()
+        {
+            double x = Column * CellSize;
+            double y = Row * CellSize;
+            Canvas.SetLeft(VisualElement, x);
+            Canvas.SetTop(VisualElement, y);
+        }
+
+        // For updating position or other dynamic changes
+        public void UpdatePosition(int newRow, int newColumn)
+        {
+            Row = newRow;
+            Column = newColumn;
+            PlaceOnCanvas();
         }
     }
+
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FinalP.Classes.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +23,18 @@ namespace FinalP.Pages
     /// </summary>
     public sealed partial class GamePage : Page
     {
+        private GameManager gameManager;
+
         public GamePage()
         {
             this.InitializeComponent();
+            gameManager = new GameManager(Warboard);
+            gameManager.DrawGridOnCanvas();
+
+            DrawGridOnCanvas(Warboard, 5, 7, 50);
+
+
+            gameManager.InitializeBoardWithRandomShips(5);
         }
 
         private void RETURN_Click(object sender, RoutedEventArgs e)
