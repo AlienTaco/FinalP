@@ -35,8 +35,30 @@
         <Image Source="/Assets/Icons/Return.png" Stretch="UniformToFill"/>
     </Button>
 </Viewbox>
- 
-            <Canvas x:Name="Warboard" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="7" Grid.RowSpan="5">
+        <Grid x:Name="GameGrid" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="7" Grid.RowSpan="5" Visibility="Visible" >
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+
+           
+            
+        </Grid>
+        <Canvas x:Name="Warboard" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="7" Grid.RowSpan="5">
+            
                 <Canvas.Background>
                     <ImageBrush ImageSource="/Assets/Backgrounds/BackgroundGame.png" Stretch="UniformToFill"/>
                 </Canvas.Background>

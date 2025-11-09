@@ -28,14 +28,28 @@ namespace FinalP.Pages
         public GamePage()
         {
             this.InitializeComponent();
-            gameManager = new GameManager(Warboard);
-            gameManager.DrawGridOnCanvas();
 
-            DrawGridOnCanvas(Warboard, 5, 7, 50);
+            gameManager = new GameManager(Warboard, 7, 5);
 
-
-            gameManager.InitializeBoardWithRandomShips(5);
+            Warboard.PointerPressed += Warboard_PointerPressed;
         }
+
+        private void Warboard_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            var pos = e.GetCurrentPoint(Warboard).Position;
+            gameManager.HandlePointerPressed(pos);
+        }
+
+        private void SelectBlueTeam()
+        {
+            gameManager.SetTeam(TeamColor.Blue);
+        }
+
+        private void SelectRedTeam()
+        {
+            gameManager.SetTeam(TeamColor.Red);
+        }
+
 
         private void RETURN_Click(object sender, RoutedEventArgs e)
         {
