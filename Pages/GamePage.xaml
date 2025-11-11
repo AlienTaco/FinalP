@@ -64,7 +64,24 @@
                 </Canvas.Background>
             </Canvas>
 
-  
-            
+
+
+        <Grid x:Name="TeamChoiceOverlay" Background="#AA000000" Visibility="Visible"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="7" Grid.RowSpan="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="28">
+                <TextBlock Text="Choose Your Team:" Foreground="White" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                <Button x:Name="ChooseRed" Content="Red Cubes" Background="Red" Foreground="White" Click="ChooseRed_Click" FontSize="24" Width="200"/>
+                <Button x:Name="ChooseBlue" Content="Blue Cubes" Background="Blue" Foreground="White" Click="ChooseBlue_Click" FontSize="24" Width="200"/>
+            </StackPanel>
+        </Grid>
+
+
+
+
+
     </Grid>
+    
+    
+    
+    
 </Page>

@@ -27,6 +27,7 @@ namespace FinalP.Classes.Services
         private double cellWidth;
         private double cellHeight;
         private TeamColor currentTeam;
+        private bool[,] occupiedCells;
 
         // Constructor
         public GameManager(Canvas canvas, int cols, int rows)
@@ -36,6 +37,7 @@ namespace FinalP.Classes.Services
             this.rows = rows;
             this.currentTeam = TeamColor.Blue;
             this.gameCanvas.Loaded += GameCanvas_Loaded;
+            this.occupiedCells = new bool[rows, columns];
         }
 
         // Loaded Event Handler
@@ -57,6 +59,14 @@ namespace FinalP.Classes.Services
 
         private void DrawSquare(int row, int col)
         {
+            if (row < 0 || row >= rows || col < 0 || col >= columns)
+                return;
+
+            if (occupiedCells[row, col])
+                return; // Skip drawing if already occupied
+
+            occupiedCells[row, col] = true;
+
             var rect = new Rectangle
             {
                 Width = cellWidth - 1,

@@ -55,5 +55,17 @@ namespace FinalP.Pages
         {
            Frame.Navigate(typeof(MenuPage));
         }
+
+        private void ChooseBlue_Click(object sender, RoutedEventArgs e)
+        {
+            gameManager.SetTeam(TeamColor.Blue);
+            TeamChoiceOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void ChooseRed_Click(object sender, RoutedEventArgs e)
+        {
+            gameManager.SetTeam(TeamColor.Red);
+            TeamChoiceOverlay.Visibility = Visibility.Collapsed;
+        }
     }
 }
