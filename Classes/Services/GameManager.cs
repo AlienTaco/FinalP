@@ -29,26 +29,25 @@ namespace FinalP.Classes.Services
         private TeamColor currentTeam;
         private bool[,] occupiedCells;
 
-        // Constructor
+        public List<GameObject> GameObjects { get; } = new List<GameObject>();
+        public bool IsBuildingMode { get; private set; } = true;
+
         public GameManager(Canvas canvas, int cols, int rows)
         {
             this.gameCanvas = canvas;
             this.columns = cols;
             this.rows = rows;
             this.currentTeam = TeamColor.Blue;
-            this.gameCanvas.Loaded += GameCanvas_Loaded;
             this.occupiedCells = new bool[rows, columns];
+            this.gameCanvas.Loaded += GameCanvas_Loaded;
         }
 
-        // Loaded Event Handler
         private void GameCanvas_Loaded(object sender, RoutedEventArgs e)
         {
             this.cellWidth = gameCanvas.ActualWidth / columns;
             this.cellHeight = gameCanvas.ActualHeight / rows;
         }
 
-
-        // Call this when pointer is pressed, passing the pointer position on canvas
         public void HandlePointerPressed(Windows.Foundation.Point position)
         {
             int col = (int)(position.X / cellWidth);
@@ -63,7 +62,7 @@ namespace FinalP.Classes.Services
                 return;
 
             if (occupiedCells[row, col])
-                return; // Skip drawing if already occupied
+                return; // Skip if already occupied
 
             occupiedCells[row, col] = true;
 
@@ -86,6 +85,80 @@ namespace FinalP.Classes.Services
         {
             currentTeam = team;
         }
+
+        public void ExitBuildingMode()
+        {
+            IsBuildingMode = false;
+            GameObjects.Clear();
+            bool[,] processed = new bool[rows, columns];
+
+            // Clear all existing visuals first
+            gameCanvas.Children.Clear();
+
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < columns; c++)
+                {
+                    if (!occupiedCells[r, c] || processed[r, c])
+                        continue;
+
+                    // Horizontal check
+                    int horLen = 1;
+                    List<(int, int)> horCells = new List<(int, int)> { (r, c) };
+                    for (int cc = c + 1; cc < c + 4 && cc < columns; cc++)
+                    {
+                        if (occupiedCells[r, cc] && !processed[r, cc])
+                        {
+                            horCells.Add((r, cc));
+                            horLen++;
+                        }
+                        else break;
+                    }
+                    if (horLen > 1)
+                    {
+                        var ship = new Ship(horCells, "Horizontal", currentTeam);
+                        GameObjects.Add(ship);
+                        foreach (var cell in horCells)
+                            processed[cell.Item1, cell.Item2] = true;
+                        continue;
+                    }
+
+                    // Vertical check
+                    int vertLen = 1;
+                    List<(int, int)> vertCells = new List<(int, int)> { (r, c) };
+                    for (int rr = r + 1; rr < r + 4 && rr < rows; rr++)
+                    {
+                        if (occupiedCells[rr, c] && !processed[rr, c])
+                        {
+                            vertCells.Add((rr, c));
+                            vertLen++;
+                        }
+                        else break;
+                    }
+                    if (vertLen > 1)
+                    {
+                        var ship = new Ship(vertCells, "Vertical", currentTeam);
+                        GameObjects.Add(ship);
+                        foreach (var cell in vertCells)
+                            processed[cell.Item1, cell.Item2] = true;
+                        continue;
+                    }
+
+                    // Single cube ship
+                    var singleShip = new Ship(new List<(int, int)> { (r, c) }, "None", currentTeam);
+                    GameObjects.Add(singleShip);
+                    processed[r, c] = true;
+                }
+            }
+
+            // Draw all ships
+            foreach (var obj in GameObjects)
+            {
+                obj.Draw(gameCanvas, cellWidth, cellHeight);
+            }
+        }
+
     }
 }
-     
+
+

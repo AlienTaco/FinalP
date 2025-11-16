@@ -62,8 +62,11 @@
                 <Canvas.Background>
                     <ImageBrush ImageSource="/Assets/Backgrounds/BackgroundGame.png" Stretch="UniformToFill"/>
                 </Canvas.Background>
-            </Canvas>
 
+
+            
+        </Canvas>
+        <Button x:Name="Exit_Build"  Grid.Column="5" Grid.Row="6" Grid.ColumnSpan="2" Grid.RowSpan="1" Content="Exit Build Mode" Background="Green" HorizontalAlignment="Center" Height="100" Width="300" CornerRadius="10" FontSize="30" Click="Exit_Build_Click"/>
 
 
         <Grid x:Name="TeamChoiceOverlay" Background="#AA000000" Visibility="Visible"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="7" Grid.RowSpan="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">

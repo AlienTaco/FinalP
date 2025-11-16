@@ -32,12 +32,17 @@ namespace FinalP.Pages
             gameManager = new GameManager(Warboard, 7, 5);
 
             Warboard.PointerPressed += Warboard_PointerPressed;
+
+            Exit_Build.Click += Exit_Build_Click;
         }
 
         private void Warboard_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             var pos = e.GetCurrentPoint(Warboard).Position;
-            gameManager.HandlePointerPressed(pos);
+            if (gameManager.IsBuildingMode)
+            {
+                gameManager.HandlePointerPressed(pos);
+            }
         }
 
         private void SelectBlueTeam()
@@ -66,6 +71,14 @@ namespace FinalP.Pages
         {
             gameManager.SetTeam(TeamColor.Red);
             TeamChoiceOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void Exit_Build_Click(object sender, RoutedEventArgs e)
+        {
+            gameManager.ExitBuildingMode();
+
+            // Optionally disable Exit_Build button or building UI here
+            Exit_Build.IsEnabled = false;
         }
     }
 }
