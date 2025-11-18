@@ -21,69 +21,37 @@ namespace FinalP.Classes.Services
 
     public class GameManager
     {
-        private Canvas gameCanvas;
-        private int rows;
-        private int columns;
-        private double cellWidth;
-        private double cellHeight;
-        private TeamColor currentTeam;
+        private readonly Grid gameGrid;
+        private readonly int rows;
+        private readonly int columns;
         private bool[,] occupiedCells;
 
         public List<GameObject> GameObjects { get; } = new List<GameObject>();
         public bool IsBuildingMode { get; private set; } = true;
+        public TeamColor CurrentTeam { get; private set; } = TeamColor.Blue;
 
-        public GameManager(Canvas canvas, int cols, int rows)
+        public GameManager(Grid grid, int rows, int cols)
         {
-            this.gameCanvas = canvas;
-            this.columns = cols;
+            this.gameGrid = grid;
             this.rows = rows;
-            this.currentTeam = TeamColor.Blue;
-            this.occupiedCells = new bool[rows, columns];
-            this.gameCanvas.Loaded += GameCanvas_Loaded;
+            this.columns = cols;
+            this.occupiedCells = new bool[rows, cols];
         }
 
-        private void GameCanvas_Loaded(object sender, RoutedEventArgs e)
+        public void HandleGridCellTapped(int row, int col, Border cellBorder)
         {
-            this.cellWidth = gameCanvas.ActualWidth / columns;
-            this.cellHeight = gameCanvas.ActualHeight / rows;
-        }
-
-        public void HandlePointerPressed(Windows.Foundation.Point position)
-        {
-            int col = (int)(position.X / cellWidth);
-            int row = (int)(position.Y / cellHeight);
-
-            DrawSquare(row, col);
-        }
-
-        private void DrawSquare(int row, int col)
-        {
-            if (row < 0 || row >= rows || col < 0 || col >= columns)
-                return;
-
-            if (occupiedCells[row, col])
-                return; // Skip if already occupied
+            if (occupiedCells[row, col]) return;
 
             occupiedCells[row, col] = true;
 
-            var rect = new Rectangle
-            {
-                Width = cellWidth - 1,
-                Height = cellHeight - 1,
-                Fill = currentTeam == TeamColor.Blue
-                    ? new SolidColorBrush(Colors.Blue)
-                    : new SolidColorBrush(Colors.Red),
-                Opacity = 0.8
-            };
-
-            Canvas.SetLeft(rect, col * cellWidth);
-            Canvas.SetTop(rect, row * cellHeight);
-            gameCanvas.Children.Add(rect);
+            cellBorder.Background = CurrentTeam == TeamColor.Blue
+                ? new SolidColorBrush(Windows.UI.Colors.Blue)
+                : new SolidColorBrush(Windows.UI.Colors.Red);
         }
 
         public void SetTeam(TeamColor team)
         {
-            currentTeam = team;
+            CurrentTeam = team;
         }
 
         public void ExitBuildingMode()
@@ -92,8 +60,9 @@ namespace FinalP.Classes.Services
             GameObjects.Clear();
             bool[,] processed = new bool[rows, columns];
 
-            // Clear all existing visuals first
-            gameCanvas.Children.Clear();
+            // Clear cell backgrounds
+            foreach (Border cell in gameGrid.Children)
+                cell.Background = new SolidColorBrush(Windows.UI.Colors.Transparent);
 
             for (int r = 0; r < rows; r++)
             {
@@ -102,9 +71,9 @@ namespace FinalP.Classes.Services
                     if (!occupiedCells[r, c] || processed[r, c])
                         continue;
 
-                    // Horizontal check
+                    // Horizontal ships
                     int horLen = 1;
-                    List<(int, int)> horCells = new List<(int, int)> { (r, c) };
+                    List<(int, int)> horCells =new List<(int, int)> { (r, c) };
                     for (int cc = c + 1; cc < c + 4 && cc < columns; cc++)
                     {
                         if (occupiedCells[r, cc] && !processed[r, cc])
@@ -116,14 +85,14 @@ namespace FinalP.Classes.Services
                     }
                     if (horLen > 1)
                     {
-                        var ship = new Ship(horCells, "Horizontal", currentTeam);
+                        var ship = new Ship(horCells, "Horizontal", CurrentTeam);
                         GameObjects.Add(ship);
                         foreach (var cell in horCells)
                             processed[cell.Item1, cell.Item2] = true;
                         continue;
                     }
 
-                    // Vertical check
+                    // Vertical ships
                     int vertLen = 1;
                     List<(int, int)> vertCells = new List<(int, int)> { (r, c) };
                     for (int rr = r + 1; rr < r + 4 && rr < rows; rr++)
@@ -137,7 +106,7 @@ namespace FinalP.Classes.Services
                     }
                     if (vertLen > 1)
                     {
-                        var ship = new Ship(vertCells, "Vertical", currentTeam);
+                        var ship = new Ship(vertCells, "Vertical", CurrentTeam);
                         GameObjects.Add(ship);
                         foreach (var cell in vertCells)
                             processed[cell.Item1, cell.Item2] = true;
@@ -145,20 +114,20 @@ namespace FinalP.Classes.Services
                     }
 
                     // Single cube ship
-                    var singleShip = new Ship(new List<(int, int)> { (r, c) }, "None", currentTeam);
+                    var singleShip = new Ship(new List<(int, int)> { (r, c) }, "None", CurrentTeam);
                     GameObjects.Add(singleShip);
                     processed[r, c] = true;
                 }
             }
 
-            // Draw all ships
-            foreach (var obj in GameObjects)
+            // Draw Ships (mark cells yellow with black border)
+            foreach (var ship in GameObjects.OfType<Ship>())
             {
-                obj.Draw(gameCanvas, cellWidth, cellHeight);
+                ship.DrawOnGrid(gameGrid);
             }
         }
-
     }
 }
+
 
 

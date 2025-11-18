@@ -9,6 +9,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
+using Windows.UI.Xaml;
 
 namespace FinalP.Classes.Templates
 {
@@ -17,31 +18,30 @@ namespace FinalP.Classes.Templates
         public List<(int row, int col)> Cells { get; set; }
         public string Orientation { get; set; }
 
-        public Ship(List<(int row, int col)> cells, string orientation, TeamColor owner)
-            : base(cells[0].row, cells[0].col, owner)
+        public Ship(List<(int, int)> cells, string orientation, TeamColor owner)
+            : base(cells[0].tuple.Item1, cells[0].tuple.Item2, owner)
         {
             Cells = cells;
             Orientation = orientation;
         }
 
-        public override void Draw(Canvas gameCanvas, double cellWidth, double cellHeight)
+        // New method to color Grid cells
+        public void DrawOnGrid(Grid grid)
         {
             foreach (var cell in Cells)
             {
-                var rect = new Windows.UI.Xaml.Shapes.Rectangle
-                {
-                    Width = cellWidth - 1,
-                    Height = cellHeight - 1,
-                    Fill = new SolidColorBrush(Windows.UI.Colors.Yellow),
-                    Stroke = new SolidColorBrush(Windows.UI.Colors.Black),
-                    StrokeThickness = 2,
-                    Opacity = 1.0 // full opacity
-                };
+                var border = grid.Children.Cast<Border>().First(b =>
+                    Grid.GetRow(b) == cell.row && Grid.GetColumn(b) == cell.col);
 
-                Canvas.SetLeft(rect, cell.col * cellWidth);
-                Canvas.SetTop(rect, cell.row * cellHeight);
-                gameCanvas.Children.Add(rect);
+                border.Background = new SolidColorBrush(Windows.UI.Colors.Yellow);
+                border.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Black);
+                border.BorderThickness = new Thickness(2);
             }
+        }
+
+        public override void Draw(Canvas gameCanvas, double cellWidth, double cellHeight)
+        {
+            // Unused now, you can remove or keep for backward compatibility
         }
     }
 }

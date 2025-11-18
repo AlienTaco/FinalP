@@ -24,25 +24,67 @@ namespace FinalP.Pages
     public sealed partial class GamePage : Page
     {
         private GameManager gameManager;
+        private const int Rows = 10;
+        private const int Cols = 10;
 
+       
         public GamePage()
         {
             this.InitializeComponent();
 
-            gameManager = new GameManager(Warboard, 7, 5);
+            InitializeGrid(PlayerGrid, Rows, Cols);
+            InitializeGrid(OpponentGrid, Rows, Cols);
 
-            Warboard.PointerPressed += Warboard_PointerPressed;
+            gameManager = new GameManager(PlayerGrid, Rows, Cols);
+
+            // PlayerGrid cells tap handling
+            foreach (Border cell in PlayerGrid.Children)
+            {
+                cell.Tapped += PlayerGrid_CellTapped;
+            }
 
             Exit_Build.Click += Exit_Build_Click;
         }
 
-        private void Warboard_PointerPressed(object sender, PointerRoutedEventArgs e)
+
+        private void InitializeGrid(Grid grid, int rows, int cols)
         {
-            var pos = e.GetCurrentPoint(Warboard).Position;
-            if (gameManager.IsBuildingMode)
+            grid.RowDefinitions.Clear();
+            grid.ColumnDefinitions.Clear();
+            grid.Children.Clear();
+
+            for (int r = 0; r < rows; r++)
+                grid.RowDefinitions.Add(new RowDefinition());
+            for (int c = 0; c < cols; c++)
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            for (int r = 0; r < rows; r++)
             {
-                gameManager.HandlePointerPressed(pos);
+                for (int c = 0; c < cols; c++)
+                {
+                    var cell = new Border
+                    {
+                        Background = new SolidColorBrush(Windows.UI.Colors.Transparent),
+                        BorderBrush = new SolidColorBrush(Windows.UI.Colors.Black),
+                        BorderThickness = new Thickness(1),
+                        Tag = (r, c)
+                    };
+                    Grid.SetRow(cell, r);
+                    Grid.SetColumn(cell, c);
+                    grid.Children.Add(cell);
+                }
             }
+        }
+
+        private void PlayerGrid_CellTapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (!gameManager.IsBuildingMode) return;
+
+            var border = sender as Border;
+            var tuple = ((int, int))border.Tag;
+            int row = tuple.Item1;
+            int col = tuple.Item2;
+            gameManager.HandleGridCellTapped(row, col, border);
         }
 
         private void SelectBlueTeam()
