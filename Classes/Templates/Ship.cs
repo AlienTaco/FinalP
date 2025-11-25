@@ -19,7 +19,7 @@ namespace FinalP.Classes.Templates
         public string Orientation { get; set; }
 
         public Ship(List<(int, int)> cells, string orientation, TeamColor owner)
-            : base(cells[0].tuple.Item1, cells[0].tuple.Item2, owner)
+           : base(cells[0].Item1, cells[0].Item2, owner)
         {
             Cells = cells;
             Orientation = orientation;

@@ -60,6 +60,24 @@ namespace FinalP.Classes.Services
             GameObjects.Clear();
             bool[,] processed = new bool[rows, columns];
 
+            // Define ship limits and tracking
+            Dictionary<int, int> ShipLimits = new Dictionary<int, int>
+    {
+        {4, 1}, // One 4-block ship
+        {3, 2}, // Two 3-block ships
+        {2, 3}, // Three 2-block ships
+        {1, 4}  // Four 1-block ships
+    };
+            Dictionary<int, int> placedShips = new Dictionary<int, int>
+    {
+        {4, 0},
+        {3, 0},
+        {2, 0},
+        {1, 0}
+    };
+
+            bool CanPlaceShip(int size) => placedShips[size] < ShipLimits[size];
+
             // Clear cell backgrounds
             foreach (Border cell in gameGrid.Children)
                 cell.Background = new SolidColorBrush(Windows.UI.Colors.Transparent);
@@ -73,7 +91,7 @@ namespace FinalP.Classes.Services
 
                     // Horizontal ships
                     int horLen = 1;
-                    List<(int, int)> horCells =new List<(int, int)> { (r, c) };
+                    List<(int, int)> horCells = new List<(int, int)> { (r, c) };
                     for (int cc = c + 1; cc < c + 4 && cc < columns; cc++)
                     {
                         if (occupiedCells[r, cc] && !processed[r, cc])
@@ -83,10 +101,11 @@ namespace FinalP.Classes.Services
                         }
                         else break;
                     }
-                    if (horLen > 1)
+                    if (horLen > 1 && CanPlaceShip(horLen))
                     {
                         var ship = new Ship(horCells, "Horizontal", CurrentTeam);
                         GameObjects.Add(ship);
+                        placedShips[horLen]++;
                         foreach (var cell in horCells)
                             processed[cell.Item1, cell.Item2] = true;
                         continue;
@@ -104,18 +123,23 @@ namespace FinalP.Classes.Services
                         }
                         else break;
                     }
-                    if (vertLen > 1)
+                    if (vertLen > 1 && CanPlaceShip(vertLen))
                     {
                         var ship = new Ship(vertCells, "Vertical", CurrentTeam);
                         GameObjects.Add(ship);
+                        placedShips[vertLen]++;
                         foreach (var cell in vertCells)
                             processed[cell.Item1, cell.Item2] = true;
                         continue;
                     }
 
                     // Single cube ship
-                    var singleShip = new Ship(new List<(int, int)> { (r, c) }, "None", CurrentTeam);
-                    GameObjects.Add(singleShip);
+                    if (CanPlaceShip(1))
+                    {
+                        var singleShip = new Ship(new List<(int, int)> { (r, c) }, "None", CurrentTeam);
+                        GameObjects.Add(singleShip);
+                        placedShips[1]++;
+                    }
                     processed[r, c] = true;
                 }
             }
@@ -126,6 +150,21 @@ namespace FinalP.Classes.Services
                 ship.DrawOnGrid(gameGrid);
             }
         }
+        private static readonly Dictionary<int, int> ShipLimits = new Dictionary<int, int>
+{
+    {4, 1}, // Only one 4-block ship allowed
+    {3, 2}, // Two 3-block ships allowed
+    {2, 3}, // Three 2-block ships allowed
+    {1, 4}  // Four 1-block ships allowed
+};
+
+        private Dictionary<int, int> placedShips = new Dictionary<int, int> // size -> count
+{
+    {4, 0},
+    {3, 0},
+    {2, 0},
+    {1, 0}
+};
     }
 }
 
