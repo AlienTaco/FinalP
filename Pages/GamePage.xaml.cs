@@ -26,11 +26,15 @@ namespace FinalP.Pages
         private GameManager gameManager;
         private const int Rows = 10;
         private const int Cols = 10;
+        private DispatcherTimer buildTimer;
+        private int buildSecondsRemaining = 60;
+        
 
-       
         public GamePage()
         {
             this.InitializeComponent();
+
+            Exit_Build.IsEnabled = false;
 
             InitializeGrid(PlayerGrid, Rows, Cols);
             InitializeGrid(OpponentGrid, Rows, Cols);
@@ -44,6 +48,10 @@ namespace FinalP.Pages
             }
 
             Exit_Build.Click += Exit_Build_Click;
+
+            buildSecondsRemaining = 60; // or any duration
+            BuildTimerText.Text = $"Time: {buildSecondsRemaining}";
+            
         }
 
 
@@ -80,6 +88,10 @@ namespace FinalP.Pages
         {
             if (!gameManager.IsBuildingMode) return;
 
+
+            if (!gameManager.TeamSelected)  // add a bool in GameManager if you want
+                return;
+
             var border = sender as Border;
             var tuple = ((int, int))border.Tag;
             int row = tuple.Item1;
@@ -95,6 +107,7 @@ namespace FinalP.Pages
         private void SelectRedTeam()
         {
             gameManager.SetTeam(TeamColor.Red);
+
         }
 
 
@@ -107,12 +120,16 @@ namespace FinalP.Pages
         {
             gameManager.SetTeam(TeamColor.Blue);
             TeamChoiceOverlay.Visibility = Visibility.Collapsed;
+            Exit_Build.IsEnabled = true;
+            StartBuildTimer();
         }
 
         private void ChooseRed_Click(object sender, RoutedEventArgs e)
         {
             gameManager.SetTeam(TeamColor.Red);
             TeamChoiceOverlay.Visibility = Visibility.Collapsed;
+            Exit_Build.IsEnabled = true;
+            StartBuildTimer();
         }
 
         private void Exit_Build_Click(object sender, RoutedEventArgs e)
@@ -121,6 +138,39 @@ namespace FinalP.Pages
 
             // Optionally disable Exit_Build button or building UI here
             Exit_Build.IsEnabled = false;
+            buildTimer?.Stop();
+            gameManager.ExitBuildingMode();
+            Exit_Build.IsEnabled = false;
         }
+
+        private void StartBuildTimer()
+        {
+            buildTimer = new DispatcherTimer();
+            buildTimer.Interval = TimeSpan.FromSeconds(1);
+            buildTimer.Tick += BuildTimer_Tick;
+            buildTimer.Start();
+        }
+
+
+
+        private void BuildTimer_Tick(object sender, object e)
+        {
+            if (buildSecondsRemaining > 0)
+            {
+                buildSecondsRemaining--;
+                BuildTimerText.Text = $"Time: {buildSecondsRemaining}";
+            }
+            else
+            {
+                buildTimer.Stop();
+                Exit_Build.IsEnabled = false;
+                gameManager.EndBuildingMode();
+            }
+        }
+
+
+
+        
+
     }
 }

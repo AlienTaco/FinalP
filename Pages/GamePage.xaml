@@ -110,7 +110,9 @@
             </StackPanel>
         </Grid>
 
-
+        <Viewbox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock x:Name="BuildTimerText"   Foreground="White" FontSize="6" Text="Time: 60" Width="35" Height="10" />
+        </Viewbox>
 
 
 

@@ -25,10 +25,13 @@ namespace FinalP.Classes.Services
         private readonly int rows;
         private readonly int columns;
         private bool[,] occupiedCells;
+        
 
         public List<GameObject> GameObjects { get; } = new List<GameObject>();
         public bool IsBuildingMode { get; private set; } = true;
+        public bool TeamSelected { get; private set; }
         public TeamColor CurrentTeam { get; private set; } = TeamColor.Blue;
+
 
         public GameManager(Grid grid, int rows, int cols)
         {
@@ -52,6 +55,8 @@ namespace FinalP.Classes.Services
         public void SetTeam(TeamColor team)
         {
             CurrentTeam = team;
+            TeamSelected = true;
+
         }
 
         public void ExitBuildingMode()
@@ -165,6 +170,19 @@ namespace FinalP.Classes.Services
     {2, 0},
     {1, 0}
 };
+
+
+        public void EndBuildingMode()
+        {
+            if (IsBuildingMode == false)
+                return;
+            ExitBuildingMode();
+        }
+
+
+
+
+
     }
 }
 
