@@ -25,12 +25,15 @@ namespace FinalP.Classes.Services
         private readonly int rows;
         private readonly int columns;
         private bool[,] occupiedCells;
-        
 
-        public List<GameObject> GameObjects { get; } = new List<GameObject>();
+
+        public List<Ship> PlayerShips { get; } = new List<Ship>();
+        public List<Ship> EnemyShips { get; } = new List<Ship>();
         public bool IsBuildingMode { get; private set; } = true;
         public bool TeamSelected { get; private set; }
         public TeamColor CurrentTeam { get; private set; } = TeamColor.Blue;
+        public bool IsBattleMode { get; private set; } = false;
+        private readonly Random rng = new Random();
 
 
         public GameManager(Grid grid, int rows, int cols)
@@ -62,7 +65,8 @@ namespace FinalP.Classes.Services
         public void ExitBuildingMode()
         {
             IsBuildingMode = false;
-            GameObjects.Clear();
+            PlayerShips.Clear();
+
             bool[,] processed = new bool[rows, columns];
 
             // Define ship limits and tracking
@@ -109,7 +113,7 @@ namespace FinalP.Classes.Services
                     if (horLen > 1 && CanPlaceShip(horLen))
                     {
                         var ship = new Ship(horCells, "Horizontal", CurrentTeam);
-                        GameObjects.Add(ship);
+                        PlayerShips.Add(ship);
                         placedShips[horLen]++;
                         foreach (var cell in horCells)
                             processed[cell.Item1, cell.Item2] = true;
@@ -131,7 +135,7 @@ namespace FinalP.Classes.Services
                     if (vertLen > 1 && CanPlaceShip(vertLen))
                     {
                         var ship = new Ship(vertCells, "Vertical", CurrentTeam);
-                        GameObjects.Add(ship);
+                        PlayerShips.Add(ship);
                         placedShips[vertLen]++;
                         foreach (var cell in vertCells)
                             processed[cell.Item1, cell.Item2] = true;
@@ -142,7 +146,7 @@ namespace FinalP.Classes.Services
                     if (CanPlaceShip(1))
                     {
                         var singleShip = new Ship(new List<(int, int)> { (r, c) }, "None", CurrentTeam);
-                        GameObjects.Add(singleShip);
+                        PlayerShips.Add(singleShip);
                         placedShips[1]++;
                     }
                     processed[r, c] = true;
@@ -150,10 +154,8 @@ namespace FinalP.Classes.Services
             }
 
             // Draw Ships (mark cells yellow with black border)
-            foreach (var ship in GameObjects.OfType<Ship>())
-            {
+            foreach (var ship in PlayerShips)
                 ship.DrawOnGrid(gameGrid);
-            }
         }
         private static readonly Dictionary<int, int> ShipLimits = new Dictionary<int, int>
 {
@@ -179,6 +181,110 @@ namespace FinalP.Classes.Services
             ExitBuildingMode();
         }
 
+
+        public void GenerateEnemyFleet(Grid enemyGrid)
+        {
+            EnemyShips.Clear();
+
+            // Ship sizes: 1x4‑block, 2x3‑block, 3x2‑block, 4x1‑block
+            int[] sizes = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
+
+            foreach (int size in sizes)
+                PlaceRandomEnemyShip(size);
+
+            // Draw them (for testing)
+            foreach (var ship in EnemyShips)
+                ship.DrawOnGrid(enemyGrid);
+        }
+
+        private void PlaceRandomEnemyShip(int size)
+        {
+            while (true)
+            {
+                bool vertical = rng.Next(2) == 0;
+
+                int maxRow = vertical ? rows - size + 1 : rows;
+                int maxCol = vertical ? columns : columns - size + 1;
+
+                int startRow = rng.Next(0, maxRow);
+                int startCol = rng.Next(0, maxCol);
+
+                var cells = new List<(int row, int col)>();
+                bool overlap = false;
+
+                for (int i = 0; i < size; i++)
+                {
+                    int r = vertical ? startRow + i : startRow;
+                    int c = vertical ? startCol : startCol + i;
+
+                    // check overlap with existing enemy ships
+                    foreach (var s in EnemyShips)
+                    {
+                        if (s.Cells.Any(cell => cell.row == r && cell.col == c))
+                        {
+                            overlap = true;
+                            break;
+                        }
+                    }
+
+                    if (overlap)
+                        break;      // abort this candidate position
+
+                    cells.Add((r, c)); // only add when we know there is no overlap
+                }
+
+                if (!overlap && cells.Count == size)
+                {
+                    var ship = new Ship(cells, vertical ? "Vertical" : "Horizontal", TeamColor.Red);
+                    EnemyShips.Add(ship);
+                    return;             // ship placed successfully
+                }
+
+                // otherwise: loop again and try a new random position
+            }
+        }
+        public void StartBattleMode()
+        {
+            IsBuildingMode = false;
+            IsBattleMode = true;
+        }
+
+        public void HandlePlayerShot(Grid enemyGrid, Border cellBorder, int row, int col)
+        {
+            // Don’t allow shooting same cell twice
+            if (cellBorder.Background is SolidColorBrush brush &&
+                (brush.Color == Windows.UI.Colors.Red || brush.Color == Windows.UI.Colors.Gray))
+                return;
+
+            // Check if any enemy ship occupies this cell
+            var hitShip = EnemyShips.FirstOrDefault(ship =>
+                ship.Cells.Any(cell => cell.row == row && cell.col == col));
+
+            if (hitShip != null)
+            {
+                // HIT: mark red
+                cellBorder.Background = new SolidColorBrush(Windows.UI.Colors.Red);
+
+                // Optional: check if ship is sunk
+                bool allHit = hitShip.Cells.All(cell =>
+                {
+                    var b = enemyGrid.Children.Cast<Border>().First(x =>
+                        Grid.GetRow(x) == cell.row && Grid.GetColumn(x) == cell.col);
+
+                    return (b.Background as SolidColorBrush)?.Color == Windows.UI.Colors.Red;
+                });
+
+                if (allHit)
+                {
+                    // e.g. outline sunk ship in dark red or log a message
+                }
+            }
+            else
+            {
+                // MISS: mark gray
+                cellBorder.Background = new SolidColorBrush(Windows.UI.Colors.Gray);
+            }
+        }
 
 
 

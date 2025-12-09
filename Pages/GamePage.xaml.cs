@@ -39,6 +39,11 @@ namespace FinalP.Pages
             InitializeGrid(PlayerGrid, Rows, Cols);
             InitializeGrid(OpponentGrid, Rows, Cols);
 
+            foreach (Border cell in OpponentGrid.Children)
+            {
+                cell.Tapped += OpponentGrid_CellTapped;
+            }
+
             gameManager = new GameManager(PlayerGrid, Rows, Cols);
 
             // PlayerGrid cells tap handling
@@ -137,10 +142,13 @@ namespace FinalP.Pages
             gameManager.ExitBuildingMode();
 
             // Optionally disable Exit_Build button or building UI here
-            Exit_Build.IsEnabled = false;
+           
             buildTimer?.Stop();
             gameManager.ExitBuildingMode();
             Exit_Build.IsEnabled = false;
+            gameManager.GenerateEnemyFleet(OpponentGrid);
+            gameManager.StartBattleMode();
+
         }
 
         private void StartBuildTimer()
@@ -165,12 +173,26 @@ namespace FinalP.Pages
                 buildTimer.Stop();
                 Exit_Build.IsEnabled = false;
                 gameManager.EndBuildingMode();
+                gameManager.StartBattleMode();
+                gameManager.GenerateEnemyFleet(OpponentGrid);
             }
+        }
+
+        private void OpponentGrid_CellTapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (!gameManager.IsBattleMode)
+                return;
+
+            var border = (Border)sender;
+            var tuple = ((int, int))border.Tag;
+            int row = tuple.Item1;
+            int col = tuple.Item2;
+
+            gameManager.HandlePlayerShot(OpponentGrid, border, row, col);
         }
 
 
 
-        
 
     }
 }

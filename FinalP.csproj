@@ -120,7 +120,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\Services\GameManager.cs" />
-    <Compile Include="Classes\Templates\GameObject.cs" />
     <Compile Include="Classes\Templates\Ship.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
