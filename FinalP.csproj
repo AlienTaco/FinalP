@@ -121,6 +121,7 @@
     </Compile>
     <Compile Include="Classes\Services\GameManager.cs" />
     <Compile Include="Classes\Templates\Ship.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -219,8 +220,16 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
     </PackageReference>
+    <PackageReference Include="WatsonTcp">
+      <Version>6.0.11</Version>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="Core\Core.csproj">
+      <Project>{696304c5-60f8-44a5-8d94-4a0b8cb3f1f4}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

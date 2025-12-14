@@ -193,8 +193,8 @@ namespace FinalP.Classes.Services
                 PlaceRandomEnemyShip(size);
 
             // Draw them (for testing)
-            foreach (var ship in EnemyShips)
-                ship.DrawOnGrid(enemyGrid);
+           // foreach (var ship in EnemyShips)
+            //    ship.DrawOnGrid(enemyGrid);
         }
 
         private void PlaceRandomEnemyShip(int size)
