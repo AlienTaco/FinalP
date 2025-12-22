@@ -1,0 +1,29 @@
+﻿<ContentDialog
+    x:Class="FinalP.Pages.StartupDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Enter connection details"
+    PrimaryButtonText="OK"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+
+    <StackPanel>
+        <TextBox x:Name="NameBox"
+                 Header="Name"
+                 PlaceholderText="Player name" />
+
+        <TextBox x:Name="IpBox"
+                 Header="IP Address"
+                 PlaceholderText="127.0.0.1" />
+
+        <TextBox x:Name="PortBox"
+                 Header="Port"
+                 PlaceholderText="4000"
+                 InputScope="Number" />
+
+        <TextBlock x:Name="ErrorText"
+                   Foreground="Red"
+                   TextWrapping="Wrap" />
+    </StackPanel>
+</ContentDialog>
+    
