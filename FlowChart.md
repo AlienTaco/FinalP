@@ -1,1 +1,8 @@
 ## FLow: Client -> Server -> All Client
+| Step                     | Client                                             | Server                                                                 | All clients                               |
+|--------------------------|----------------------------------------------------|------------------------------------------------------------------------|-------------------------------------------|
+| **Connection**           | Send `Connected`                                  | Add client `IpPort`                                                    |                                           |
+| **Registration**         | Create Manager and send `Register\|playerName`    | Send `Register\|playerName - registered`                               | Show `playerName - registered`            |
+| **First player finished ships** | Send command `AddPlayer\|Player` with all ships | Add player to `GameState`, set player message = `Wait`, send command `UpdateGameState\|GameState` | Binding `GameState`                       |
+| **Second player finished ships** | Send command `AddPlayer\|Player` with all ships | Add player to `GameState`, set player message = `Move`, send command `UpdateGameState\|GameState` | Binding `GameState`                       |
+| **Player makes shoot**   | Send command `Shoot\|Shoot`                       | Update `GameState`, send command `UpdateGameState\|GameState`          | Binding `GameState`                       |
