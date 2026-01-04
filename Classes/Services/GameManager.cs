@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WatsonTcp;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -26,7 +27,8 @@ namespace FinalP.Classes.Services
         private readonly int columns;
         private bool[,] occupiedCells;
 
-
+        public Client _client;
+        public string PlayerName { get; set; }
         public List<Ship> PlayerShips { get; } = new List<Ship>();
         public List<Ship> EnemyShips { get; } = new List<Ship>();
         public bool IsBuildingMode { get; private set; } = true;
@@ -34,6 +36,7 @@ namespace FinalP.Classes.Services
         public TeamColor CurrentTeam { get; private set; } = TeamColor.Blue;
         public bool IsBattleMode { get; private set; } = false;
         private readonly Random rng = new Random();
+        public Action<string> OnShowMessage;
 
 
         public GameManager(Grid grid, int rows, int cols)
@@ -43,6 +46,29 @@ namespace FinalP.Classes.Services
             this.columns = cols;
             this.occupiedCells = new bool[rows, cols];
         }
+
+
+        public async Task Init(string serverIp, string playerName)
+        {
+            PlayerName = playerName;
+            _client = new Client(serverIp, 1111);
+            _client.Events.MessageReceived += MessageReceivedAsync;
+            _client.Connect();
+            await _client.SendAsync($"Register|{playerName}");
+
+        }
+
+        private async void MessageReceivedAsync(object sender, MessageReceivedEventArgs e)
+        {
+            var message = Encoding.UTF8.GetString(e.Data);
+            var parts = message.Split('|'); 
+            switch (parts[0])
+            {
+                case "Register": OnShowMessage?.Invoke(parts[1]); break;
+            }
+        }
+
+
 
         public void HandleGridCellTapped(int row, int col, Border cellBorder)
         {

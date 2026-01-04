@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -28,8 +31,8 @@ namespace FinalP.Pages
         private const int Cols = 10;
         private DispatcherTimer buildTimer;
         private int buildSecondsRemaining = 60;
-        
 
+        private GameManager _manager;
         public GamePage()
         {
             this.InitializeComponent();
@@ -56,8 +59,46 @@ namespace FinalP.Pages
 
             buildSecondsRemaining = 60; // or any duration
             BuildTimerText.Text = $"Time: {buildSecondsRemaining}";
-            
+
         }
+
+        private async Task Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            await ShowStartupDialogAsync();
+        }
+
+        private async void ShowMessage(string message)
+        {
+            await CallUI(() =>
+            {
+                txtMsgReceived.Text = message;
+            });
+        }
+
+        private async Task CallUI(DispatchedHandler handler)
+        {
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, handler);
+        }
+
+        private async Task ShowStartupDialogAsync()
+        {
+            _manager=new GameManager(PlayerGrid, Rows, Cols);
+
+            _manager.OnShowMessage += ShowMessage;
+            
+            var dlg = new StartupDialog();
+            await dlg.ShowAsync(); // modal; blocks interaction with the page
+
+            string PlayerName = dlg.PlayerName;
+            string ServerIp = dlg.IpAddress;
+            int ServerPort = dlg.Port;
+
+            await _manager.Init(ServerIp, PlayerName);
+
+            // Now you can use these values (e.g., initialize networking, etc.)
+        }
+
+
 
 
         private void InitializeGrid(Grid grid, int rows, int cols)
@@ -118,7 +159,7 @@ namespace FinalP.Pages
 
         private void RETURN_Click(object sender, RoutedEventArgs e)
         {
-           Frame.Navigate(typeof(MenuPage));
+            Frame.Navigate(typeof(MenuPage));
         }
 
         private void ChooseBlue_Click(object sender, RoutedEventArgs e)
@@ -142,7 +183,7 @@ namespace FinalP.Pages
             gameManager.ExitBuildingMode();
 
             // Optionally disable Exit_Build button or building UI here
-           
+
             buildTimer?.Stop();
             gameManager.ExitBuildingMode();
             Exit_Build.IsEnabled = false;
@@ -190,8 +231,6 @@ namespace FinalP.Pages
 
             gameManager.HandlePlayerShot(OpponentGrid, border, row, col);
         }
-
-
 
 
     }

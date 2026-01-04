@@ -39,21 +39,9 @@ namespace FinalP
         public MenuPage()
         {
             this.InitializeComponent();
-            _ = ShowStartupDialogAsync();
         }
 
-        private async Task ShowStartupDialogAsync()
-        {
-            var dlg = new StartupDialog();
-            await dlg.ShowAsync(); // modal; blocks interaction with the page
-
-            PlayerName = dlg.PlayerName;
-            ServerIp = dlg.IpAddress;
-            ServerPort = dlg.Port;
-
-            // Now you can use these values (e.g., initialize networking, etc.)
-        }
-
+       
 
         private void START_Click(object sender, RoutedEventArgs e)
         {
