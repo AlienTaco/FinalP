@@ -114,7 +114,11 @@
             <TextBlock x:Name="BuildTimerText"   Foreground="White" FontSize="6" Text="Time: 60" Width="35" Height="10" />
         </Viewbox>
 
-
+        <Viewbox>
+            <TextBlock x:Name="Registered"
+                   Foreground="Black"
+                   TextWrapping="Wrap" />
+        </Viewbox>
 
     </Grid>
     

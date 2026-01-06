@@ -62,7 +62,7 @@ namespace FinalP.Pages
 
         }
 
-        private async Task Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             await ShowStartupDialogAsync();
         }
@@ -71,7 +71,7 @@ namespace FinalP.Pages
         {
             await CallUI(() =>
             {
-                txtMsgReceived.Text = message;
+                Registered.Text = message;
             });
         }
 
