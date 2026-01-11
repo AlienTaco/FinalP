@@ -64,7 +64,14 @@ namespace FinalP.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            await ShowStartupDialogAsync();
+           // try
+           // {
+                await ShowStartupDialogAsync();
+           // }
+           // catch(Exception ex)
+           // {
+           //   Registered.Text = "Shlomi";
+           // }
         }
 
         private async void ShowMessage(string message)
