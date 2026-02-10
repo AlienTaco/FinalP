@@ -7,7 +7,15 @@ namespace Server
     {
         static void Main()
         {
+            Console.WriteLine("I am server!");
 
+            Console.WriteLine("Enter server ip");
+            var serverip = Console.ReadLine().Trim();
+
+
+            new Server(serverip, int.Parse("11111"));
+            Console.WriteLine("Server is started");
+            Console.ReadKey();
         }
     }
 }

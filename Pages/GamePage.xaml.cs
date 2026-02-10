@@ -64,14 +64,16 @@ namespace FinalP.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-           // try
-           // {
-                await ShowStartupDialogAsync();
-           // }
-           // catch(Exception ex)
-           // {
-           //   Registered.Text = "Shlomi";
-           // }
+            StartupDialog startupDialog = new StartupDialog();
+            startupDialog.OnInputData += ShowStartupDialogAsync;
+            await startupDialog.ShowAsync();
+        }
+
+        private async void ShowStartupDialogAsync(string userName, string serverIp)
+        {
+            _manager = new GameManager(PlayerGrid, Rows, Cols);
+            _manager.OnShowMessage += ShowMessage;
+            await _manager.Init(serverIp, userName);
         }
 
         private async void ShowMessage(string message)
@@ -87,23 +89,7 @@ namespace FinalP.Pages
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, handler);
         }
 
-        private async Task ShowStartupDialogAsync()
-        {
-            _manager=new GameManager(PlayerGrid, Rows, Cols);
-
-            _manager.OnShowMessage += ShowMessage;
-            
-            var dlg = new StartupDialog();
-            await dlg.ShowAsync(); // modal; blocks interaction with the page
-
-            string PlayerName = dlg.PlayerName;
-            string ServerIp = dlg.IpAddress;
-            int ServerPort = dlg.Port;
-
-            await _manager.Init(ServerIp, PlayerName);
-
-            // Now you can use these values (e.g., initialize networking, etc.)
-        }
+      
 
 
 

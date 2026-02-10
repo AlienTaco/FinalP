@@ -18,7 +18,7 @@ namespace Server
 
             Start();                                 // המשתמשים בפעולה מוכנה
 
-            Console.WriteLine("Server started");
+           
         }
 
         private void ClientConnected(object sender, ConnectionEventArgs e)
@@ -68,6 +68,14 @@ namespace Server
                 //case "GameStep":
                 //    await GameStep(parts[1]);
                 //    break;
+            }
+        }
+        private async Task SendMessage(string message)
+        {
+            // send message to all clients:
+            foreach (var client in ListClients())
+            {
+                await SendAsync(client.Guid, $"{message}");
             }
         }
         //private async Task GameStep(string jsonGameStep)
@@ -134,16 +142,9 @@ namespace Server
         //}
 
 
-        private async Task SendMessage(string message)
-        {
-            // send message to all clients:
-            foreach (var client in ListClients())
-            {
-                await SendAsync(client.Guid, $"{message}");
-            }
-        }
 
-       // private async Task UpdateGameState()
+
+        // private async Task UpdateGameState()
         //{
         //    string json = JsonSerializer.Serialize(_gameState);
         //    await SendMessage($"UpdateGameState|{json}");

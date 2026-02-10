@@ -51,7 +51,7 @@ namespace FinalP.Classes.Services
         public async Task Init(string serverIp, string playerName)
         {
             PlayerName = playerName;
-            _client = new Client(serverIp, 1111);
+            _client = new Client(serverIp, 11111);
             _client.Events.MessageReceived += MessageReceivedAsync;
             _client.Connect();
             await _client.SendAsync($"Register|{playerName}");

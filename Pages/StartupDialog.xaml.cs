@@ -22,7 +22,7 @@ namespace FinalP.Pages
     /// </summary>
     public sealed partial class StartupDialog : ContentDialog
     {
-
+        public Action<string, string> OnInputData;
 
         public string PlayerName => NameBox.Text.Trim();
         public string IpAddress => IpBox.Text.Trim();
@@ -58,7 +58,7 @@ namespace FinalP.Pages
                 args.Cancel = true;
                 return;
             }
-
+            OnInputData?.Invoke(PlayerName, IpAddress);
             // Add any additional IP/port validation here if you like.
         }
     }
